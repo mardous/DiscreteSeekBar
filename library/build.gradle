@@ -1,0 +1,47 @@
+apply plugin: 'com.android.library'
+apply from: 'versioning.gradle'
+
+ext {
+    bintrayRepo = 'Maven'
+    bintrayName = 'DiscreteSeekBar'
+
+    publishedGroupId = 'com.mardous'
+    libraryName = 'DiscreteSeekBar'
+    artifact = 'discrete-seekbar'
+
+    libraryDescription = 'DiscreteSeekbar is my poor attempt to develop an android implementation of the Discrete Slider component from the Google Material Design Guidelines'
+
+    siteUrl = 'https://github.com/mardous/DiscreteSeekBar'
+    gitUrl = 'https://github.com/mardous/DiscreteSeekBar.git'
+
+    libraryVersion = '1.0.0'
+    libraryVersionCode = buildVersionCode(libraryVersion)
+
+    developerId = 'mardous'
+    developerName = 'Christians Martínez Alvarado'
+    developerEmail = 'mardous.contact@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion '30.0.0'
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode libraryVersionCode
+        versionName libraryVersion
+    }
+}
+
+dependencies {
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.core:core:1.3.1'
+}
+
+apply from: 'maven-install.gradle'
+apply from: 'bintray.gradle'
