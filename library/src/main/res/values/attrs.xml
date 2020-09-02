@@ -38,5 +38,6 @@
         <attr name="dsb_scrubberHeight" format="integer|dimension"/>
         <attr name="dsb_thumbSize" format="integer|dimension"/>
         <attr name="dsb_indicatorSeparation" format="integer|dimension"/>
+        <attr name="dsb_animateEnabledState" format="boolean"/>
     </declare-styleable>
 </resources>

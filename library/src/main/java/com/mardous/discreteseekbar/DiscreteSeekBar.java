@@ -146,8 +146,9 @@ public class DiscreteSeekBar extends View {
     private boolean mMirrorForRtl = false;
     private boolean mAllowTrackClick = true;
     private boolean mIndicatorPopupEnabled = true;
+    private boolean mAnimateEnabledState = true;
     //We use our own Formatter to avoid creating new instances on every progress change
-    Formatter mFormatter;
+    private Formatter mFormatter;
     private String mIndicatorFormatter;
     private NumericTransformer mNumericTransformer;
     private StringBuilder mFormatBuilder;
@@ -186,6 +187,8 @@ public class DiscreteSeekBar extends View {
         int max = 100;
         int min = 0;
         int value = 0;
+
+        mAnimateEnabledState = a.getBoolean(R.styleable.DiscreteSeekBar_dsb_animateEnabledState, mAnimateEnabledState);
         mMirrorForRtl = a.getBoolean(R.styleable.DiscreteSeekBar_dsb_mirrorForRtl, mMirrorForRtl);
         mAllowTrackClick = a.getBoolean(R.styleable.DiscreteSeekBar_dsb_allowTrackClickToDrag, mAllowTrackClick);
         mIndicatorPopupEnabled = a.getBoolean(R.styleable.DiscreteSeekBar_dsb_indicatorPopupEnabled, mIndicatorPopupEnabled);
@@ -270,6 +273,16 @@ public class DiscreteSeekBar extends View {
         if (!editMode) {
             mIndicator = new PopupIndicator(context, attrs, defStyleAttr, convertValueToMessage(mMax),
                     thumbSize, thumbSize + mAddedTouchBounds + separation);
+            MarkerDrawable.MarkerAnimationListener mFloaterListener = new MarkerDrawable.MarkerAnimationListener() {
+                @Override
+                public void onClosingComplete() {
+                    mThumb.animateToNormal();
+                }
+
+                @Override
+                public void onOpeningComplete() {
+                }
+            };
             mIndicator.setListener(mFloaterListener);
         }
         a.recycle();
@@ -281,7 +294,7 @@ public class DiscreteSeekBar extends View {
     /**
      * Sets the current Indicator formatter string
      *
-     * @param formatter
+     * @param formatter The new formatter to use.
      * @see String#format(String, Object...)
      * @see #setNumericTransformer(DiscreteSeekBar.NumericTransformer)
      */
@@ -293,7 +306,7 @@ public class DiscreteSeekBar extends View {
     /**
      * Sets the current {@link DiscreteSeekBar.NumericTransformer}
      *
-     * @param transformer
+     * @param transformer The new transformer to use.
      * @see #getNumericTransformer()
      */
     public void setNumericTransformer(@Nullable NumericTransformer transformer) {
@@ -506,6 +519,16 @@ public class DiscreteSeekBar extends View {
      */
     public void setIndicatorPopupEnabled(boolean enabled) {
         this.mIndicatorPopupEnabled = enabled;
+    }
+
+    /**
+     * Sets if the {@link #setEnabled(boolean)} method of this {@link DiscreteSeekBar}
+     * must change the view's state using a smooth animation.
+     *
+     * @param mAnimateEnabledState The new value.
+     */
+    public void setAnimateEnabledState(boolean mAnimateEnabledState) {
+        this.mAnimateEnabledState = mAnimateEnabledState;
     }
 
     private void updateIndicatorSizes() {
@@ -833,11 +856,11 @@ public class DiscreteSeekBar extends View {
         mPositionAnimator = ValueAnimator.ofFloat(curProgress, progress);
         mPositionAnimator.setDuration(PROGRESS_ANIMATION_DURATION);
         mPositionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        setAnimationPosition((float) valueAnimator.getAnimatedValue());
-                    }
-                });
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                setAnimationPosition((float) valueAnimator.getAnimatedValue());
+            }
+        });
 
         mPositionAnimator.start();
     }
@@ -987,16 +1010,19 @@ public class DiscreteSeekBar extends View {
         }
     }
 
-    private MarkerDrawable.MarkerAnimationListener mFloaterListener = new MarkerDrawable.MarkerAnimationListener() {
-        @Override
-        public void onClosingComplete() {
-            mThumb.animateToNormal();
+    @Override
+    public void setEnabled(final boolean enabled) {
+        if (mAnimateEnabledState) {
+            animate().alpha(enabled ? 1.0f : 0.5f).setDuration(500).withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    DiscreteSeekBar.super.setEnabled(enabled);
+                }
+            }).start();
+        } else {
+            super.setEnabled(enabled);
         }
-
-        @Override
-        public void onOpeningComplete() {
-        }
-    };
+    }
 
     @Override
     protected void onDetachedFromWindow() {
@@ -1040,14 +1066,14 @@ public class DiscreteSeekBar extends View {
         private int max;
         private int min;
 
-        public CustomState(Parcel source) {
+        CustomState(Parcel source) {
             super(source);
             progress = source.readInt();
             max = source.readInt();
             min = source.readInt();
         }
 
-        public CustomState(Parcelable superState) {
+        CustomState(Parcelable superState) {
             super(superState);
         }
 
@@ -1059,18 +1085,16 @@ public class DiscreteSeekBar extends View {
             outcoming.writeInt(min);
         }
 
-        public static final Creator<CustomState> CREATOR =
-                new Creator<CustomState>() {
+        public static final Creator<CustomState> CREATOR = new Creator<CustomState>() {
+            @Override
+            public CustomState[] newArray(int size) {
+                return new CustomState[size];
+            }
 
-                    @Override
-                    public CustomState[] newArray(int size) {
-                        return new CustomState[size];
-                    }
-
-                    @Override
-                    public CustomState createFromParcel(Parcel incoming) {
-                        return new CustomState(incoming);
-                    }
-                };
+            @Override
+            public CustomState createFromParcel(Parcel incoming) {
+                return new CustomState(incoming);
+            }
+        };
     }
 }
