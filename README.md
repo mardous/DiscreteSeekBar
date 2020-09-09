@@ -67,6 +67,7 @@ You can tweak a few things of the DiscreteSeekbar:
 * **dsb_allowTrackClickToDrag**: allows clicking outside the thumb circle to initiate drag. Default TRUE
 * **dsb_indicatorFormatter**: a string [Format] to apply to the value inside the bubble indicator.
 * **dsb_indicatorPopupEnabled**: choose if the bubble indicator will be shown. Default TRUE 
+* **dsb_animateEnabledState**: indicates if the DiscreteSeekBar should toggle its "Enabled" state with a smooth animation
 
 #### Design
  
