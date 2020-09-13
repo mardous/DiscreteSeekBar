@@ -1,5 +1,7 @@
 # DiscreteSeekBar
 
+[![](https://jitpack.io/v/mardous/DiscreteSeekBar.svg)](https://jitpack.io/#mardous/DiscreteSeekBar)
+
 This is a copy of [DiscreteSeekBar](https://github.com/AnderWeb/discreteSeekBar) by [Gustavo Claramunt](https://github.com/AnderWeb)
 
 ## Description
@@ -32,8 +34,8 @@ The material-floating-thing is composed into the WindowManager (like the typical
 
 >For this I'm not sure about the amounts of things I've copied from [PopupWindow] and the possible issues.
 
-## Usage
-This is published in my JFrog repo:
+## Download
+##### Download with Bintray OSS:
 
 ```groovy
 repositories {
@@ -43,10 +45,22 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.mardous:discrete-seekbar:1.0.0'
+    implementation 'com.mardous:discrete-seekbar:VERSION'
 }
 ```
 
+##### Download with JitPack:
+```groovy
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    implementation 'com.github.mardous:DiscreteSeekBar:Tag'
+}
+```
+
+## Usage
 Once imported into your project, you just need to put them into your layous like:
 
 ```xml
