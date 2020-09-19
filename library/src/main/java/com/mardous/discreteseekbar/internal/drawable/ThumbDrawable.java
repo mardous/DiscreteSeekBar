@@ -36,8 +36,6 @@ import androidx.annotation.NonNull;
  * <p>
  * This special delay is meant to help avoiding frame glitches while the {@link com.mardous.discreteseekbar.internal.Marker} is added to the Window
  * </p>
- *
- * @hide
  */
 public class ThumbDrawable extends StateDrawable implements Animatable {
     //The current size for this drawable. Must be converted to real DPs

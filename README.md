@@ -103,4 +103,3 @@ You can also use the attribute **discreteSeekBarStyle** on your themes with a cu
 [Animatable Drawable]:https://developer.android.com/reference/android/graphics/drawable/Animatable.html
 [PopupWindow]:https://developer.android.com/reference/android/widget/PopupWindow.html
 [Format]:https://developer.android.com/reference/java/util/Formatter.html
-

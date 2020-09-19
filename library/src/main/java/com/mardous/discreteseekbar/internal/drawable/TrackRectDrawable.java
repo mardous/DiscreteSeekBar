@@ -24,8 +24,6 @@ import androidx.annotation.NonNull;
 /**
  * Simple {@link com.mardous.discreteseekbar.internal.drawable.StateDrawable} implementation
  * to draw rectangles
- *
- * @hide
  */
 public class TrackRectDrawable extends StateDrawable {
     public TrackRectDrawable(@NonNull ColorStateList tintStateList) {

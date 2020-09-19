@@ -16,6 +16,7 @@
 
 package com.mardous.discreteseekbar.internal;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -31,7 +32,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.core.view.ViewCompat;
 import com.mardous.discreteseekbar.R;
-import com.mardous.discreteseekbar.internal.compat.SeekBarCompat;
 import com.mardous.discreteseekbar.internal.drawable.MarkerDrawable;
 
 /**
@@ -41,9 +41,8 @@ import com.mardous.discreteseekbar.internal.drawable.MarkerDrawable;
  * and the {@link com.mardous.discreteseekbar.internal.drawable.MarkerDrawable}
  * with the required positions and offsets
  * </p>
- *
- * @hide
  */
+@SuppressLint("ViewConstructor")
 public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationListener {
     private static final int PADDING_DP = 4;
     private static final int ELEVATION_DP = 8;
@@ -54,14 +53,16 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
     //some distance between the thumb and our bubble marker.
     //This will be added to our measured height
     private int mSeparation;
-    MarkerDrawable mMarkerDrawable;
+    private MarkerDrawable mMarkerDrawable;
 
     public Marker(Context context, AttributeSet attrs, int defStyleAttr, String maxValue, int thumbSize, int separation) {
         super(context, attrs, defStyleAttr);
         //as we're reading the parent DiscreteSeekBar attributes, it may wrongly set this view's visibility.
         setVisibility(View.VISIBLE);
-        
+
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
+        @SuppressLint("CustomViewStyleable")
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DiscreteSeekBar,
                 R.attr.discreteSeekBarStyle, R.style.Widget_DiscreteSeekBar);
 
@@ -71,12 +72,23 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
         mNumber = new TextView(context);
         //Add some padding to this textView so the bubble has some space to breath
         mNumber.setPadding(padding, 0, padding, 0);
-        mNumber.setTextAppearance(context, textAppearanceId);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mNumber.setTextAppearance(textAppearanceId);
+        } else {
+            //noinspection deprecation
+            mNumber.setTextAppearance(context, textAppearanceId);
+        }
+
         mNumber.setGravity(Gravity.CENTER);
         mNumber.setText(maxValue);
         mNumber.setMaxLines(1);
         mNumber.setSingleLine(true);
-        SeekBarCompat.setTextDirection(mNumber, TEXT_DIRECTION_LOCALE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mNumber.setTextDirection(TEXT_DIRECTION_LOCALE);
+        }
+
         mNumber.setVisibility(View.INVISIBLE);
 
         //add some padding for the elevation shadow not to be clipped
@@ -92,12 +104,25 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
         mMarkerDrawable.setMarkerListener(this);
         mMarkerDrawable.setExternalOffset(padding);
 
-        //Elevation for anroid 5+
+        //Elevation for Android 5+
         float elevation = a.getDimension(R.styleable.DiscreteSeekBar_dsb_indicatorElevation, ELEVATION_DP * displayMetrics.density);
         ViewCompat.setElevation(this, elevation);
+
+        /*
+
+        This code causes an Exception in Android 10+
+        See: https://github.com/AnderWeb/discreteSeekBar/issues/127
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            SeekBarCompat.setOutlineProvider(this, mMarkerDrawable);
+            setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setConvexPath(mMarkerDrawable.getPath());
+                }
+            });
         }
+         */
+
         a.recycle();
     }
 
@@ -163,20 +188,20 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
         animateOpen();
     }
 
-    public void setValue(CharSequence value) {
-        mNumber.setText(value);
-    }
-
     public CharSequence getValue() {
         return mNumber.getText();
     }
 
-    public void animateOpen() {
+    void setValue(CharSequence value) {
+        mNumber.setText(value);
+    }
+
+    void animateOpen() {
         mMarkerDrawable.stop();
         mMarkerDrawable.animateToPressed();
     }
 
-    public void animateClose() {
+    void animateClose() {
         mMarkerDrawable.stop();
         mNumber.setVisibility(View.INVISIBLE);
         mMarkerDrawable.animateToNormal();

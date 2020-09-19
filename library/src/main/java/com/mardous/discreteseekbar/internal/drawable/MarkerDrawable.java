@@ -40,8 +40,6 @@ import androidx.annotation.NonNull;
  * <li>Animates color change from the normal state color to the pressed state color</li>
  * <li>Uses a {@link android.graphics.Path} to also serve as Outline for API>=21</li>
  * </ul>
- *
- * @hide
  */
 public class MarkerDrawable extends StateDrawable implements Animatable {
     private static final long FRAME_DURATION = 1000 / 60;
@@ -64,9 +62,9 @@ public class MarkerDrawable extends StateDrawable implements Animatable {
     private int mStartColor;//Color when the Marker is OPEN
     private int mEndColor;//Color when the arker is CLOSED
 
-    Path mPath = new Path();
-    RectF mRect = new RectF();
-    Matrix mMatrix = new Matrix();
+    private Path mPath = new Path();
+    private RectF mRect = new RectF();
+    private Matrix mMatrix = new Matrix();
     private MarkerAnimationListener mMarkerListener;
 
     public MarkerDrawable(@NonNull ColorStateList tintList, int closedSize) {
@@ -123,8 +121,7 @@ public class MarkerDrawable extends StateDrawable implements Animatable {
         int totalSize = Math.min(bounds.width(), bounds.height());
 
         float initial = mClosedStateSize;
-        float destination = totalSize;
-        float currentSize = initial + (destination - initial) * currentScale;
+        float currentSize = initial + ((float) totalSize - initial) * currentScale;
 
         float halfSize = currentSize / 2f;
         float inverseScale = 1f - currentScale;
@@ -242,8 +239,8 @@ public class MarkerDrawable extends StateDrawable implements Animatable {
      * This is the "poor's man" AnimatorListener for this Drawable
      */
     public interface MarkerAnimationListener {
-        public void onClosingComplete();
+        void onClosingComplete();
 
-        public void onOpeningComplete();
+        void onOpeningComplete();
     }
 }

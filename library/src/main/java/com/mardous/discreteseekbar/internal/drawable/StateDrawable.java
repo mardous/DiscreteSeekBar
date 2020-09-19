@@ -30,8 +30,6 @@ import androidx.annotation.NonNull;
  * <p>
  * Subclasses should implement {@link #doDraw(android.graphics.Canvas, android.graphics.Paint)}
  * </p>
- *
- * @hide
  */
 public abstract class StateDrawable extends Drawable {
     private ColorStateList mTintStateList;

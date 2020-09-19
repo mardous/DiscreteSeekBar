@@ -335,7 +335,7 @@ public class DiscreteSeekBar extends View {
      * Also if the current progress is out of the new range, it will be set to MIN
      * </p>
      *
-     * @param max
+     * @param max the value.
      * @see #setMin(int)
      * @see #setProgress(int)
      */

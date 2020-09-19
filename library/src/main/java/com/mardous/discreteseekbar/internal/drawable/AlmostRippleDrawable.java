@@ -107,6 +107,7 @@ public class AlmostRippleDrawable extends StateDrawable implements Animatable {
         for (int i : oldState) {
             if (i == android.R.attr.state_pressed) {
                 oldPressed = true;
+                break;
             }
         }
         super.setState(stateSet);

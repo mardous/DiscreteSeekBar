@@ -38,7 +38,6 @@ import com.mardous.discreteseekbar.internal.drawable.MarkerDrawable;
  * This will attach a View to the Window (full-width, measured-height, positioned just under the thumb)
  * </p>
  *
- * @hide
  * @see #showIndicator(android.view.View, android.graphics.Rect)
  * @see #dismiss()
  * @see #dismissComplete()
@@ -55,7 +54,7 @@ public class PopupIndicator {
     //... phew!
     private MarkerDrawable.MarkerAnimationListener mListener;
     private int[] mDrawingLocation = new int[2];
-    Point screenSize = new Point();
+    private Point screenSize = new Point();
 
     public PopupIndicator(Context context, AttributeSet attrs, int defStyleAttr, String maxValue, int thumbSize, int separation) {
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
