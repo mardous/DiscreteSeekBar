@@ -47,14 +47,14 @@ public class PopupIndicator {
 
     private final WindowManager mWindowManager;
     private boolean mShowing;
-    private Floater mPopupView;
+    private final Floater mPopupView;
     //Outside listener for the DiscreteSeekBar to get MarkerDrawable animation events.
     //The whole chain of events goes this way:
     //MarkerDrawable->Marker->Floater->mListener->DiscreteSeekBar....
     //... phew!
     private MarkerDrawable.MarkerAnimationListener mListener;
-    private int[] mDrawingLocation = new int[2];
-    private Point screenSize = new Point();
+    private final int[] mDrawingLocation = new int[2];
+    private final Point screenSize = new Point();
 
     public PopupIndicator(Context context, AttributeSet attrs, int defStyleAttr, String maxValue, int thumbSize, int separation) {
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -133,10 +133,10 @@ public class PopupIndicator {
      */
     public void dismissComplete() {
         if (isShowing()) {
-            mShowing = false;
             try {
                 mWindowManager.removeViewImmediate(mPopupView);
             } finally {
+                mShowing = false;
             }
         }
     }
@@ -181,9 +181,6 @@ public class PopupIndicator {
 
     /**
      * I'm NOT completely sure how all this bitwise things work...
-     *
-     * @param curFlags
-     * @return
      */
     private int computeFlags(int curFlags) {
         curFlags &= ~(
@@ -207,7 +204,7 @@ public class PopupIndicator {
      * (like moving the marker around, having the Marker's outline to work, etc)
      */
     private class Floater extends FrameLayout implements MarkerDrawable.MarkerAnimationListener {
-        private Marker mMarker;
+        private final Marker mMarker;
         private int mOffset;
 
         public Floater(Context context, AttributeSet attrs, int defStyleAttr, String maxValue, int thumbSize, int separation) {

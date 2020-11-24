@@ -80,7 +80,7 @@ public class ThumbDrawable extends StateDrawable implements Animatable {
         invalidateSelf();
     }
 
-    private Runnable opener = new Runnable() {
+    private final Runnable opener = new Runnable() {
         @Override
         public void run() {
             mOpen = true;

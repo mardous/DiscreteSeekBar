@@ -46,14 +46,20 @@ import com.mardous.discreteseekbar.internal.drawable.MarkerDrawable;
 public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationListener {
     private static final int PADDING_DP = 4;
     private static final int ELEVATION_DP = 8;
-    //The TextView to show the info
-    private TextView mNumber;
-    //The max width of this View
+    /**
+     *The TextView to show the info
+     */
+    private final TextView mNumber;
+    /**
+     * The max width of this View
+     */
     private int mWidth;
-    //some distance between the thumb and our bubble marker.
-    //This will be added to our measured height
-    private int mSeparation;
-    private MarkerDrawable mMarkerDrawable;
+    /**
+     * some distance between the thumb and our bubble marker.
+     * This will be added to our measured height
+     */
+    private final int mSeparation;
+    private final MarkerDrawable mMarkerDrawable;
 
     public Marker(Context context, AttributeSet attrs, int defStyleAttr, String maxValue, int thumbSize, int separation) {
         super(context, attrs, defStyleAttr);

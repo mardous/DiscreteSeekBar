@@ -46,13 +46,13 @@ public class MarkerDrawable extends StateDrawable implements Animatable {
     private static final int ANIMATION_DURATION = 250;
 
     private float mCurrentScale = 0f;
-    private Interpolator mInterpolator;
+    private final Interpolator mInterpolator;
     private long mStartTime;
     private boolean mReverse = false;
     private boolean mRunning = false;
     private int mDuration = ANIMATION_DURATION;
     //size of the actual thumb drawable to use as circle state size
-    private float mClosedStateSize;
+    private final float mClosedStateSize;
     //value to store que current scale when starting an animation and interpolate from it
     private float mAnimationInitialValue;
     //extra offset directed from the View to account
@@ -62,9 +62,9 @@ public class MarkerDrawable extends StateDrawable implements Animatable {
     private int mStartColor;//Color when the Marker is OPEN
     private int mEndColor;//Color when the arker is CLOSED
 
-    private Path mPath = new Path();
-    private RectF mRect = new RectF();
-    private Matrix mMatrix = new Matrix();
+    private final Path mPath = new Path();
+    private final RectF mRect = new RectF();
+    private final Matrix mMatrix = new Matrix();
     private MarkerAnimationListener mMarkerListener;
 
     public MarkerDrawable(@NonNull ColorStateList tintList, int closedSize) {

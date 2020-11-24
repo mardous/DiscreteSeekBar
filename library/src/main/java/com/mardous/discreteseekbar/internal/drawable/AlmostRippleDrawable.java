@@ -34,7 +34,7 @@ public class AlmostRippleDrawable extends StateDrawable implements Animatable {
     private static final float INACTIVE_SCALE = 0f;
     private static final float ACTIVE_SCALE = 1f;
     private float mCurrentScale = INACTIVE_SCALE;
-    private Interpolator mInterpolator;
+    private final Interpolator mInterpolator;
     private long mStartTime;
     private boolean mReverse = false;
     private boolean mRunning = false;
@@ -96,8 +96,7 @@ public class AlmostRippleDrawable extends StateDrawable implements Animatable {
     }
 
     private int decreasedAlpha(int alpha) {
-        int scale = 100 + (100 >> 7);
-        return alpha * scale >> 8;
+        return alpha * 100 >> 8;
     }
 
     @Override
