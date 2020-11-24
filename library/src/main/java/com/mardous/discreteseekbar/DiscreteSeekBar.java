@@ -130,14 +130,14 @@ public class DiscreteSeekBar extends View {
     private static final int INDICATOR_DELAY_FOR_TAPS = 150;
     private static final int DEFAULT_THUMB_COLOR = 0xff009688;
     private static final int SEPARATION_DP = 5;
-    private ThumbDrawable mThumb;
-    private TrackRectDrawable mTrack;
-    private TrackRectDrawable mScrubber;
-    private Drawable mRipple;
+    private final ThumbDrawable mThumb;
+    private final TrackRectDrawable mTrack;
+    private final TrackRectDrawable mScrubber;
+    private final Drawable mRipple;
 
-    private int mTrackHeight;
-    private int mScrubberHeight;
-    private int mAddedTouchBounds;
+    private final int mTrackHeight;
+    private final int mScrubberHeight;
+    private final int mAddedTouchBounds;
 
     private int mMax;
     private int mMin;
@@ -156,14 +156,14 @@ public class DiscreteSeekBar extends View {
     private boolean mIsDragging;
     private int mDragOffset;
 
-    private Rect mInvalidateRect = new Rect();
-    private Rect mTempRect = new Rect();
+    private final Rect mInvalidateRect = new Rect();
+    private final Rect mTempRect = new Rect();
     private PopupIndicator mIndicator;
     private ValueAnimator mPositionAnimator;
     private float mAnimationPosition;
     private int mAnimationTarget;
     private float mDownX;
-    private float mTouchSlop;
+    private final float mTouchSlop;
 
     public DiscreteSeekBar(Context context) {
         this(context, null);
@@ -808,31 +808,41 @@ public class DiscreteSeekBar extends View {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //TODO: Should we reverse the keys for RTL? The framework's SeekBar does NOT....
         boolean handled = false;
         if (isEnabled()) {
             int progress = getAnimatedProgress();
             switch (keyCode) {
                 case KeyEvent.KEYCODE_DPAD_LEFT:
                     handled = true;
-                    if (progress <= mMin) break;
-                    animateSetProgress(progress - mKeyProgressIncrement);
+                    if (!isRtl()) {
+                        if (progress <= mMin) break;
+                        animateSetProgress(progress - mKeyProgressIncrement);
+                    } else {
+                        if (progress >= mMax) break;
+                        animateSetProgress(progress + mKeyProgressIncrement);
+                    }
                     break;
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
                     handled = true;
-                    if (progress >= mMax) break;
-                    animateSetProgress(progress + mKeyProgressIncrement);
+                    if (!isRtl()) {
+                        if (progress >= mMax) break;
+                        animateSetProgress(progress + mKeyProgressIncrement);
+                    } else {
+                        if (progress <= mMin) break;
+                        animateSetProgress(progress - mKeyProgressIncrement);
+                    }
                     break;
             }
         }
-
         return handled || super.onKeyDown(keyCode, event);
+    }
+
+    private void updateProgressByKey(int progress, boolean rtl) {
     }
 
     private int getAnimatedProgress() {
         return isAnimationRunning() ? getAnimationTarget() : mValue;
     }
-
 
     private boolean isAnimationRunning() {
         return mPositionAnimator != null && mPositionAnimator.isRunning();
@@ -855,12 +865,7 @@ public class DiscreteSeekBar extends View {
         mAnimationTarget = progress;
         mPositionAnimator = ValueAnimator.ofFloat(curProgress, progress);
         mPositionAnimator.setDuration(PROGRESS_ANIMATION_DURATION);
-        mPositionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                setAnimationPosition((float) valueAnimator.getAnimatedValue());
-            }
-        });
+        mPositionAnimator.addUpdateListener(valueAnimator -> setAnimationPosition((float) valueAnimator.getAnimatedValue()));
 
         mPositionAnimator.start();
     }
@@ -967,6 +972,7 @@ public class DiscreteSeekBar extends View {
         finalBounds.inset(-mAddedTouchBounds, -mAddedTouchBounds);
         mInvalidateRect.union(finalBounds);
         SeekBarCompat.setHotspotBounds(mRipple, finalBounds.left, finalBounds.top, finalBounds.right, finalBounds.bottom);
+        invalidate();
         invalidate(mInvalidateRect);
     }
 
@@ -987,12 +993,7 @@ public class DiscreteSeekBar extends View {
         }
     }
 
-    private Runnable mShowIndicatorRunnable = new Runnable() {
-        @Override
-        public void run() {
-            showFloater();
-        }
-    };
+    private final Runnable mShowIndicatorRunnable = this::showFloater;
 
     private void showFloater() {
         if (!isInEditMode()) {
@@ -1013,12 +1014,7 @@ public class DiscreteSeekBar extends View {
     @Override
     public void setEnabled(final boolean enabled) {
         if (mAnimateEnabledState) {
-            animate().alpha(enabled ? 1.0f : 0.5f).setDuration(500).withEndAction(new Runnable() {
-                @Override
-                public void run() {
-                    DiscreteSeekBar.super.setEnabled(enabled);
-                }
-            }).start();
+            animate().alpha(enabled ? 1.0f : 0.5f).setDuration(500).withEndAction(() -> super.setEnabled(enabled)).start();
         } else {
             super.setEnabled(enabled);
         }
