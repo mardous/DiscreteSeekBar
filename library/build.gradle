@@ -36,11 +36,16 @@ android {
         versionCode libraryVersionCode
         versionName libraryVersion
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'androidx.core:core:1.3.1'
+    implementation 'androidx.core:core:1.3.2'
 }
 
 apply from: 'maven-install.gradle'
