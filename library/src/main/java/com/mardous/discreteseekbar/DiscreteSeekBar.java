@@ -837,9 +837,6 @@ public class DiscreteSeekBar extends View {
         return handled || super.onKeyDown(keyCode, event);
     }
 
-    private void updateProgressByKey(int progress, boolean rtl) {
-    }
-
     private int getAnimatedProgress() {
         return isAnimationRunning() ? getAnimationTarget() : mValue;
     }
