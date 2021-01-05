@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/mardous/DiscreteSeekBar'
     gitUrl = 'https://github.com/mardous/DiscreteSeekBar.git'
 
-    libraryVersion = '1.1.2'
+    libraryVersion = '1.2.0'
     libraryVersionCode = buildVersionCode(libraryVersion)
 
     developerId = 'mardous'
