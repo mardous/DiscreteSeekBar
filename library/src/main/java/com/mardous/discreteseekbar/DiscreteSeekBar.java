@@ -55,13 +55,13 @@ public class DiscreteSeekBar extends View {
      */
     public interface OnProgressChangeListener {
         /**
-         * When the {@link DiscreteSeekBar} value changes
+         * When the {@link DiscreteSeekBar} progress changes
          *
          * @param seekBar  The DiscreteSeekBar
-         * @param value    the new value
+         * @param progress    the new progress
          * @param fromUser if the change was made from the user or not (i.e. the developer calling {@link #setProgress(int)}
          */
-        void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser);
+        void onProgressChanged(DiscreteSeekBar seekBar, int progress, boolean fromUser);
 
         void onStartTrackingTouch(DiscreteSeekBar seekBar);
 
