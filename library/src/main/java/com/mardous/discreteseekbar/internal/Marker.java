@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -61,6 +62,10 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
     private final int mSeparation;
     private final MarkerDrawable mMarkerDrawable;
 
+    private boolean mAutoAdjustIndicatorTextColor = true;
+    private final int mTextColorLight;
+    private final int mTextColorDark;
+
     public Marker(Context context, AttributeSet attrs, int defStyleAttr, String maxValue, int thumbSize, int separation) {
         super(context, attrs, defStyleAttr);
         //as we're reading the parent DiscreteSeekBar attributes, it may wrongly set this view's visibility.
@@ -71,6 +76,10 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
         @SuppressLint("CustomViewStyleable")
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DiscreteSeekBar,
                 R.attr.discreteSeekBarStyle, R.style.Widget_DiscreteSeekBar);
+
+        mAutoAdjustIndicatorTextColor = a.getBoolean(R.styleable.DiscreteSeekBar_dsb_autoAdjustIndicatorTextColor, mAutoAdjustIndicatorTextColor);
+        mTextColorLight = a.getColor(R.styleable.DiscreteSeekBar_dsb_autoIndicatorTextColorLight, Color.WHITE);
+        mTextColorDark = a.getColor(R.styleable.DiscreteSeekBar_dsb_autoIndicatorTextColorDark, Color.BLACK);
 
         int padding = (int) (PADDING_DP * displayMetrics.density) * 2;
         int textAppearanceId = a.getResourceId(R.styleable.DiscreteSeekBar_dsb_indicatorTextAppearance,
@@ -236,5 +245,12 @@ public class Marker extends ViewGroup implements MarkerDrawable.MarkerAnimationL
 
     public void setColors(int startColor, int endColor) {
         mMarkerDrawable.setColors(startColor, endColor);
+        if (mAutoAdjustIndicatorTextColor) {
+            mNumber.setTextColor(isLightColor(endColor) ? mTextColorDark : mTextColorLight);
+        }
+    }
+
+    private boolean isLightColor(int color) {
+        return (1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255) < 0.4;
     }
 }

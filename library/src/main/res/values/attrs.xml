@@ -39,5 +39,8 @@
         <attr name="dsb_thumbSize" format="integer|dimension"/>
         <attr name="dsb_indicatorSeparation" format="integer|dimension"/>
         <attr name="dsb_animateEnabledState" format="boolean"/>
+        <attr name="dsb_autoAdjustIndicatorTextColor" format="boolean"/>
+        <attr name="dsb_autoIndicatorTextColorLight" format="color"/>
+        <attr name="dsb_autoIndicatorTextColorDark" format="color"/>
     </declare-styleable>
 </resources>

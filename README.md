@@ -2,8 +2,6 @@
 
 [![](https://jitpack.io/v/mardous/DiscreteSeekBar.svg)](https://jitpack.io/#mardous/DiscreteSeekBar)
 
-This is a copy of [DiscreteSeekBar](https://github.com/AnderWeb/discreteSeekBar) by [Gustavo Claramunt](https://github.com/AnderWeb)
-
 ## Description
 DiscreteSeekbar is my poor attempt to develop an android implementation of the [Discrete Slider] component from the Google Material Design Guidelines.
 
@@ -19,8 +17,7 @@ android.util.Log.wtf("WARNING!! HACKERY-DRAGONS!!");
 I've done a few bit of hacky cede and a bunch of things I'm not completely proud of, so use under your sole responsibility (or help me improve it via pull-requests!)
 
 ## Implementation details
-This thing runs on minSDK=7 (well, technically could run 4 but can't test since AVDs for api 4 are deprecated and just don't boot).
-Obviously some of the subtle animations (navigating with the Keyboard, the Ripple effect, text fade ins/fade outs, etc) are not going to work on APIS lower than 11, but the bubble thing does. And I haven't found a way of improving this with 11-21 APIs, so...
+This thing runs on API 16+.
 
 The base SeekBar is pretty simple. Just 3 drawables for the track, progress and thumb. Some touch event logic to drag, some key event logic to move, and that's all.
 
@@ -35,28 +32,15 @@ The material-floating-thing is composed into the WindowManager (like the typical
 >For this I'm not sure about the amounts of things I've copied from [PopupWindow] and the possible issues.
 
 ## Download
-##### Download with Bintray OSS:
+You can download this library using JitPack:
 
-```groovy
-repositories {
-    maven {
-        url  "https://dl.bintray.com/mardous/Maven"
-    }
-}
-
-dependencies {
-    implementation 'com.mardous:discrete-seekbar:VERSION'
-}
-```
-
-##### Download with JitPack:
 ```groovy
 repositories {
     maven { url "https://jitpack.io" }
 }
 
 dependencies {
-    implementation 'com.github.mardous:DiscreteSeekBar:Tag'
+    implementation 'com.github.mardous:DiscreteSeekBar:1.1.3'
 }
 ```
 
@@ -81,7 +65,8 @@ You can tweak a few things of the DiscreteSeekbar:
 * **dsb_allowTrackClickToDrag**: allows clicking outside the thumb circle to initiate drag. Default TRUE
 * **dsb_indicatorFormatter**: a string [Format] to apply to the value inside the bubble indicator.
 * **dsb_indicatorPopupEnabled**: choose if the bubble indicator will be shown. Default TRUE 
-* **dsb_animateEnabledState**: indicates if the DiscreteSeekBar should toggle its "Enabled" state with a smooth animation
+* **dsb_animateEnabledState**: indicates if the DiscreteSeekBar should toggle its "Enabled" state with a smooth animation. Default TRUE
+* **dsb_autoAdjustIndicatorTextColor**: indicates whether the color of the indicator text should automatically change based on the indicator color. For example, make the text dark when the indicator is light. Default TRUE
 
 #### Design
  
@@ -95,6 +80,8 @@ You can tweak a few things of the DiscreteSeekbar:
 * **dsb_scrubberHeight**: dimension for the height of the scrubber (selected area) drawable.
 * **dsb_thumbSize**: dimension for the size of the thumb drawable.
 * **dsb_indicatorSeparation**: dimension for the vertical distance from the thumb to the indicator. 
+* **dsb_autoIndicatorTextColorLight**: used when the parameter "dsb_autoAdjustIndicatorTextColor" is TRUE. Defines the color to use when a light text color is required.
+* **dsb_autoIndicatorTextColorDark**: used when the parameter "dsb_autoAdjustIndicatorTextColor" is TRUE. Defines the color to use when a dark text color is required.
 
 You can also use the attribute **discreteSeekBarStyle** on your themes with a custom Style to be applied to all the DiscreteSeekBars on your app/activity/fragment/whatever.
 
